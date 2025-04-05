@@ -210,50 +210,60 @@ const Alunos: React.FC = () => {
       <Typography variant="h6" gutterBottom>
         Alunos Cadastrados
       </Typography>
-      <Grid container spacing={2}>
-        {alunos.map((aluno, index) => (
-          <Grid item xs={12} sm={6} md={4} key={aluno.id}>
-            <Grow in timeout={500 + index * 100}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <Typography variant="h6">{aluno.nome}</Typography>
-                    <Box>
-                      <IconButton
-                        color="primary"
-                        onClick={() => {
-                          setAlunoEditando(aluno);
-                          setDialogEdicaoAberto(true);
-                        }}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        color="error"
-                        onClick={() => {
-                          setAlunoParaExcluir(aluno);
-                          setDialogAberto(true);
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+      {alunos.length === 0 ? (
+        <Card>
+          <CardContent>
+            <Typography align="center" color="textSecondary">
+              Nenhum aluno cadastrado. Use o formulário acima para cadastrar um novo aluno.
+            </Typography>
+          </CardContent>
+        </Card>
+      ) : (
+        <Grid container spacing={2}>
+          {alunos.map((aluno, index) => (
+            <Grid item xs={12} sm={6} md={4} key={aluno.id}>
+              <Grow in timeout={500 + index * 100}>
+                <Card>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <Typography variant="h6">{aluno.nome}</Typography>
+                      <Box>
+                        <IconButton
+                          color="primary"
+                          onClick={() => {
+                            setAlunoEditando(aluno);
+                            setDialogEdicaoAberto(true);
+                          }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          color="error"
+                          onClick={() => {
+                            setAlunoParaExcluir(aluno);
+                            setDialogAberto(true);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
                     </Box>
-                  </Box>
-                  <Typography color="textSecondary">ID: {aluno.id}</Typography>
-                  <Typography color="textSecondary">{aluno.email}</Typography>
-                  <Typography color="textSecondary">{aluno.telefone}</Typography>
-                  <Typography color="textSecondary">
-                    Plano: {aluno.nome_plano}
-                  </Typography>
-                  <Typography color="textSecondary">
-                    Data de Matrícula: {new Date(aluno.data_matricula).toLocaleDateString()}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grow>
-          </Grid>
-        ))}
-      </Grid>
+                    <Typography color="textSecondary">ID: {aluno.id}</Typography>
+                    <Typography color="textSecondary">{aluno.email}</Typography>
+                    <Typography color="textSecondary">{aluno.telefone}</Typography>
+                    <Typography color="textSecondary">
+                      Plano: {aluno.nome_plano}
+                    </Typography>
+                    <Typography color="textSecondary">
+                      Data de Matrícula: {new Date(aluno.data_matricula).toLocaleDateString()}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grow>
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       <Dialog open={dialogAberto} onClose={() => setDialogAberto(false)}>
         <DialogTitle>Confirmar Exclusão</DialogTitle>

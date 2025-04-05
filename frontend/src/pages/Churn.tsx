@@ -12,6 +12,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Grow,
 } from '@mui/material';
 import { apiService, RiscoChurn } from '../api';
 
@@ -43,13 +44,13 @@ const Churn: React.FC = () => {
 
   return (
     <Box sx={{ p: 4 }}>
-
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
       )}
 
+      <Grow in timeout={800}>
       <Card sx={{ maxWidth: 600, mx: 'auto', mb: 4 }}>
         <CardContent>
           <Typography variant="h6" gutterBottom>
@@ -80,8 +81,10 @@ const Churn: React.FC = () => {
           </form>
         </CardContent>
       </Card>
+      </Grow>
 
       {riscoChurn && (
+        <Grow in timeout={800}>
         <Card sx={{ maxWidth: 600, mx: 'auto' }}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -114,6 +117,7 @@ const Churn: React.FC = () => {
             </Box>
           </CardContent>
         </Card>
+        </Grow>
       )}
     </Box>
   );

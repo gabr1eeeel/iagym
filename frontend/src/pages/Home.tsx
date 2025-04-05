@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Container, Grid, Paper, Button } from '@mui/material';
+import { Box, Typography, Container, Grid, Paper, Button, Grow } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import PeopleIcon from '@mui/icons-material/People';
@@ -41,6 +41,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const Home = () => {
   return (
+    <Grow in timeout={800}>
     <Container maxWidth="lg">
       <Box sx={{ textAlign: 'center', mb: 6 }}>
         <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main', mt: 4 }}>
@@ -141,6 +142,7 @@ const Home = () => {
         </Grid>
       </Grid>
     </Container>
+    </Grow>
   );
 };
 

@@ -7,6 +7,7 @@ import {
   CardContent,
   TextField,
   Alert,
+  Grow,
 } from '@mui/material';
 import { apiService } from '../api';
 
@@ -41,10 +42,10 @@ const Checkin: React.FC = () => {
           {success}
         </Alert>
       )}
-
-      <Card sx={{ maxWidth: 600, mx: 'auto' }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
+      <Grow in timeout={800}>
+        <Card sx={{ maxWidth: 600, mx: 'auto' }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
             Registrar Check-in
           </Typography>
           <form onSubmit={handleSubmit}>
@@ -64,8 +65,9 @@ const Checkin: React.FC = () => {
               Registrar Check-in
             </Button>
           </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </Grow>
     </Box>
   );
 };

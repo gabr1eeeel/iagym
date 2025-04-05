@@ -8,6 +8,7 @@ import {
   TextField,
   Alert,
   CircularProgress,
+  Grow,
 } from '@mui/material';
 import { apiService } from '../api';
 import type { Frequencia as FrequenciaType } from '../api';
@@ -40,7 +41,7 @@ const FrequenciaPage: React.FC = () => {
           <Typography>{error}</Typography>
         </Alert>
       )}
-
+      <Grow in timeout={800}>
       <Card sx={{ maxWidth: 600, mx: 'auto', mb: 4 }}>
         <CardContent>
           <Typography variant="h6" gutterBottom>
@@ -71,8 +72,10 @@ const FrequenciaPage: React.FC = () => {
           </form>
         </CardContent>
       </Card>
+      </Grow>
 
       {frequencia && (
+        <Grow in timeout={800}>
         <Card sx={{ maxWidth: 600, mx: 'auto' }}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -91,6 +94,7 @@ const FrequenciaPage: React.FC = () => {
             </Box>
           </CardContent>
         </Card>
+        </Grow>
       )}
     </Box>
   );
