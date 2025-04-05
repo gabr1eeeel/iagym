@@ -47,11 +47,8 @@ const Alunos: React.FC = () => {
           apiService.listarAlunos(),
           apiService.listarPlanos(),
         ]);
-        console.log('Planos carregados:', planosData); // Debug
-
         // Se não houver planos, inicializa
         if (planosData.length === 0) {
-          console.log('Inicializando planos...'); // Debug
           await apiService.inicializarPlanos();
           const planosAtualizados = await apiService.listarPlanos();
           setPlanos(planosAtualizados);
@@ -61,7 +58,6 @@ const Alunos: React.FC = () => {
 
         setAlunos(alunosData);
       } catch (err) {
-        console.error('Erro ao carregar dados:', err); // Debug
         setError('Erro ao carregar dados.');
       }
     };
@@ -184,7 +180,6 @@ const Alunos: React.FC = () => {
                       labelId="plano-label"
                       value={novoAluno.plano_id}
                       onChange={(e) => {
-                        console.log('Valor selecionado:', e.target.value); // Debug
                         setNovoAluno({ ...novoAluno, plano_id: e.target.value });
                       }}
                       label="Plano"

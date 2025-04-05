@@ -43,7 +43,7 @@ const Home = () => {
   return (
     <Container maxWidth="lg">
       <Box sx={{ textAlign: 'center', mb: 6 }}>
-        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main', mt: 4 }}>
           Bem-vindo ao IAGym
         </Typography>
         <Typography variant="h6" color="text.secondary" sx={{ maxWidth: '600px', mx: 'auto' }}>
