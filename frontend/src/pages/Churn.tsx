@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -13,6 +13,7 @@ import {
   ListItem,
   ListItemText,
   Grow,
+  Snackbar,
 } from '@mui/material';
 import { apiService, RiscoChurn } from '../api';
 
@@ -21,6 +22,18 @@ const Churn: React.FC = () => {
   const [riscoChurn, setRiscoChurn] = useState<RiscoChurn | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [openError, setOpenError] = useState(false);
+
+  const handleCloseError = () => {
+    setOpenError(false);
+    setError(null);
+  };
+
+  useEffect(() => {
+    if (error) {
+      setOpenError(true);
+    }
+  }, [error]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,11 +57,15 @@ const Churn: React.FC = () => {
 
   return (
     <Box sx={{ p: 4 }}>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+      <Snackbar
+        open={openError}
+        autoHideDuration={3000}
+        onClose={handleCloseError}
+      >
+        <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
           {error}
         </Alert>
-      )}
+      </Snackbar>
 
       <Grow in timeout={800}>
       <Card sx={{ maxWidth: 600, mx: 'auto', mb: 4 }}>
@@ -103,9 +120,15 @@ const Churn: React.FC = () => {
                 />
               </Box>
               <Box>
-                <Typography variant="subtitle1" gutterBottom>
-                  Fatores de Risco:
-                </Typography>
+                {riscoChurn.fatores.length > 0 ? (
+                  <Typography variant="subtitle1" gutterBottom>
+                    Fatores de Risco:
+                  </Typography>
+                ) : (
+                  <Typography variant="subtitle1" gutterBottom>
+                    Nenhum fator de risco identificado
+                  </Typography>
+                )}
                 <List>
                   {riscoChurn.fatores.map((fator, index) => (
                     <ListItem key={index}>

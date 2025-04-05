@@ -1,6 +1,11 @@
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
+from enum import Enum
+
+class StatusMatricula(str, Enum):
+    ATIVA = "ATIVA"
+    CANCELADA = "CANCELADA"
 
 class PlanoBase(BaseModel):
     nome: str
@@ -23,13 +28,15 @@ class AlunoBase(BaseModel):
     plano_id: int
 
 class AlunoCreate(AlunoBase):
-    pass
+    status_matricula: StatusMatricula = StatusMatricula.ATIVA
 
 class Aluno(AlunoBase):
     id: int
     data_matricula: datetime
     nome_plano: str
     risco_churn: float
+    status_matricula: StatusMatricula
+    data_cancelamento: Optional[datetime] = None
 
     class Config:
         orm_mode = True
@@ -40,6 +47,7 @@ class AlunoUpdate(BaseModel):
     telefone: Optional[str] = None
     plano_id: Optional[int] = None
     nome_plano: Optional[str] = None
+    status_matricula: Optional[StatusMatricula] = None
 
     class Config:
         orm_mode = True

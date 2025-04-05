@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -9,6 +9,7 @@ import {
   Alert,
   CircularProgress,
   Grow,
+  Snackbar,
 } from '@mui/material';
 import { apiService } from '../api';
 import type { Frequencia as FrequenciaType } from '../api';
@@ -18,6 +19,18 @@ const FrequenciaPage: React.FC = () => {
   const [frequencia, setFrequencia] = useState<FrequenciaType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [openError, setOpenError] = useState(false);
+
+  const handleCloseError = () => {
+    setOpenError(false);
+    setError(null);
+  };
+
+  useEffect(() => {
+    if (error) {
+      setOpenError(true);
+    }
+  }, [error]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,12 +48,16 @@ const FrequenciaPage: React.FC = () => {
 
   return (
     <Box sx={{ p: 4 }}>
-
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          <Typography>{error}</Typography>
+      <Snackbar
+        open={openError}
+        autoHideDuration={3000}
+        onClose={handleCloseError}
+      >
+        <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
+          {error}
         </Alert>
-      )}
+      </Snackbar>
+
       <Grow in timeout={800}>
       <Card sx={{ maxWidth: 600, mx: 'auto', mb: 4 }}>
         <CardContent>

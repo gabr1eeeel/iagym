@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -8,6 +8,7 @@ import {
   TextField,
   Alert,
   Grow,
+  Snackbar,
 } from '@mui/material';
 import { apiService } from '../api';
 
@@ -15,6 +16,30 @@ const Checkin: React.FC = () => {
   const [alunoId, setAlunoId] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+
+  const handleCloseError = () => {
+    setOpenError(false);
+    setError(null);
+  };
+
+  const handleCloseSuccess = () => {
+    setOpenSuccess(false);
+    setSuccess(null);
+  };
+
+  useEffect(() => {
+    if (error) {
+      setOpenError(true);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      setOpenSuccess(true);
+    }
+  }, [success]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,17 +56,26 @@ const Checkin: React.FC = () => {
 
   return (
     <Box sx={{ p: 4 }}>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+      <Snackbar
+        open={openError}
+        autoHideDuration={3000}
+        onClose={handleCloseError}
+      >
+        <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
           {error}
         </Alert>
-      )}
+      </Snackbar>
 
-      {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+      >
+        <Alert onClose={handleCloseSuccess} severity="success" sx={{ width: '100%' }}>
           {success}
         </Alert>
-      )}
+      </Snackbar>
+
       <Grow in timeout={800}>
         <Card sx={{ maxWidth: 600, mx: 'auto' }}>
           <CardContent>

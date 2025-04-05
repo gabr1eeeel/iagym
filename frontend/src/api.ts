@@ -20,6 +20,8 @@ export interface Aluno {
   data_matricula: string;
   nome_plano: string;
   risco_churn: number;
+  status_matricula: string;
+  data_cancelamento?: string;
 }
 
 export interface Checkin {
@@ -39,6 +41,14 @@ export interface RiscoChurn {
   fatores: string[];
 }
 
+export interface NovoAluno {
+  nome: string;
+  email: string;
+  telefone: string;
+  plano_id: number;
+  status_matricula: string;
+}
+
 export const apiService = {
   // Alunos
   listarAlunos: async () => {
@@ -56,7 +66,7 @@ export const apiService = {
     return response.data;
   },
 
-  criarAluno: async (aluno: Omit<Aluno, 'id' | 'data_matricula' | 'nome_plano' | 'risco_churn'>) => {
+  criarAluno: async (aluno: NovoAluno) => {
     const response = await api.post<Aluno>('/aluno', aluno);
     return response.data;
   },
@@ -79,15 +89,21 @@ export const apiService = {
     return response.data;
   },
 
-  // Excluir Aluno
-  excluirAluno: async (alunoId: number) => {
-    const response = await api.delete(`/aluno/${alunoId}`);
+  // Cancelar Matrícula
+  cancelarMatricula: async (alunoId: number) => {
+    const response = await api.post<Aluno>(`/aluno/${alunoId}/cancelar`);
     return response.data;
   },
 
   // Atualizar Aluno
   atualizarAluno: async (alunoId: number, aluno: Partial<Aluno>) => {
     const response = await api.put<Aluno>(`/aluno/${alunoId}`, aluno);
+    return response.data;
+  },
+
+  // Deletar Aluno
+  deletarAluno: async (alunoId: number) => {
+    const response = await api.delete(`/aluno/${alunoId}`);
     return response.data;
   },
 }; 

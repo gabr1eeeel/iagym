@@ -13,12 +13,14 @@ import {
   FormControl,
   InputLabel,
   Grow,
-  Zoom,
   IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  Snackbar,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -32,13 +34,18 @@ const Alunos: React.FC = () => {
     email: '',
     telefone: '',
     plano_id: '',
+    status_matricula: 'ATIVA'
   });
   const [alunoEditando, setAlunoEditando] = useState<Aluno | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [alunoParaExcluir, setAlunoParaExcluir] = useState<Aluno | null>(null);
+  const [alunoCancelando, setAlunoCancelando] = useState<Aluno | null>(null);
   const [dialogAberto, setDialogAberto] = useState(false);
   const [dialogEdicaoAberto, setDialogEdicaoAberto] = useState(false);
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [alunoExcluindo, setAlunoExcluindo] = useState<Aluno | null>(null);
+  const [dialogExclusaoAberto, setDialogExclusaoAberto] = useState(false);
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -70,9 +77,10 @@ const Alunos: React.FC = () => {
       const aluno = await apiService.criarAluno({
         ...novoAluno,
         plano_id: parseInt(novoAluno.plano_id),
+        status_matricula: 'ATIVA'
       });
       setAlunos([...alunos, aluno]);
-      setNovoAluno({ nome: '', email: '', telefone: '', plano_id: '' });
+      setNovoAluno({ nome: '', email: '', telefone: '', plano_id: '', status_matricula: 'ATIVA' });
       setSuccess('Aluno cadastrado com sucesso!');
       setError(null);
     } catch (err: any) {
@@ -85,17 +93,17 @@ const Alunos: React.FC = () => {
     }
   };
 
-  const handleExcluirAluno = async () => {
-    if (!alunoParaExcluir) return;
+  const handleCancelarMatricula = async () => {
+    if (!alunoCancelando) return;
 
     try {
-      await apiService.excluirAluno(alunoParaExcluir.id);
-      setAlunos(alunos.filter(a => a.id !== alunoParaExcluir.id));
-      setSuccess(`Aluno ${alunoParaExcluir.nome} excluído com sucesso!`);
-      setAlunoParaExcluir(null);
+      const alunoAtualizado = await apiService.cancelarMatricula(alunoCancelando.id);
+      setAlunos(alunos.map(a => a.id === alunoAtualizado.id ? alunoAtualizado : a));
+      setSuccess(`Matrícula do aluno ${alunoCancelando.nome} cancelada com sucesso!`);
+      setAlunoCancelando(null);
       setDialogAberto(false);
     } catch (err) {
-      setError('Erro ao excluir aluno. Tente novamente.');
+      setError('Erro ao cancelar matrícula. Tente novamente.');
     }
   };
 
@@ -108,6 +116,7 @@ const Alunos: React.FC = () => {
         email: alunoEditando.email,
         telefone: alunoEditando.telefone,
         plano_id: alunoEditando.plano_id,
+        status_matricula: alunoEditando.status_matricula,
       });
       
       setAlunos(alunos.map(a => a.id === alunoAtualizado.id ? alunoAtualizado : a));
@@ -119,23 +128,63 @@ const Alunos: React.FC = () => {
     }
   };
 
+  const handleDeletarAluno = async () => {
+    if (!alunoExcluindo) return;
+
+    try {
+      await apiService.deletarAluno(alunoExcluindo.id);
+      setAlunos(alunos.filter(a => a.id !== alunoExcluindo.id));
+      setSuccess(`Aluno ${alunoExcluindo.nome} deletado com sucesso!`);
+      setAlunoExcluindo(null);
+      setDialogExclusaoAberto(false);
+    } catch (err) {
+      setError('Erro ao deletar aluno. Tente novamente.');
+    }
+  };
+
+  const handleCloseError = () => {
+    setOpenError(false);
+    setError(null);
+  };
+
+  const handleCloseSuccess = () => {
+    setOpenSuccess(false);
+    setSuccess(null);
+  };
+
+  useEffect(() => {
+    if (error) {
+      setOpenError(true);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      setOpenSuccess(true);
+    }
+  }, [success]);
+
   return (
     <Box sx={{ p: 4 }}>
-      {error && (
-        <Zoom in>
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        </Zoom>
-      )}
+      <Snackbar
+        open={openError}
+        autoHideDuration={3000}
+        onClose={handleCloseError}
+      >
+        <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      </Snackbar>
 
-      {success && (
-        <Zoom in>
-          <Alert severity="success" sx={{ mb: 2 }}>
-            {success}
-          </Alert>
-        </Zoom>
-      )}
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+      >
+        <Alert onClose={handleCloseSuccess} severity="success" sx={{ width: '100%' }}>
+          {success}
+        </Alert>
+      </Snackbar>
 
       <Grow in timeout={800}>
         <Card sx={{ mb: 4 }}>
@@ -240,8 +289,8 @@ const Alunos: React.FC = () => {
                         <IconButton
                           color="error"
                           onClick={() => {
-                            setAlunoParaExcluir(aluno);
-                            setDialogAberto(true);
+                            setAlunoExcluindo(aluno);
+                            setDialogExclusaoAberto(true);
                           }}
                         >
                           <DeleteIcon />
@@ -257,6 +306,17 @@ const Alunos: React.FC = () => {
                     <Typography color="textSecondary">
                       Data de Matrícula: {new Date(aluno.data_matricula).toLocaleDateString()}
                     </Typography>
+                    <Typography 
+                      color={aluno.status_matricula === 'ATIVA' ? 'primary' : 'error'}
+                      sx={{ mt: 1, fontWeight: 'bold' }}
+                    >
+                      Status: {aluno.status_matricula}
+                    </Typography>
+                    {aluno.data_cancelamento && (
+                      <Typography color="error">
+                        Cancelada em: {new Date(aluno.data_cancelamento).toLocaleDateString()}
+                      </Typography>
+                    )}
                   </CardContent>
                 </Card>
               </Grow>
@@ -266,17 +326,17 @@ const Alunos: React.FC = () => {
       )}
 
       <Dialog open={dialogAberto} onClose={() => setDialogAberto(false)}>
-        <DialogTitle>Confirmar Exclusão</DialogTitle>
+        <DialogTitle>Confirmar Cancelamento de Matrícula</DialogTitle>
         <DialogContent>
           <Typography>
-            Tem certeza que deseja excluir o aluno {alunoParaExcluir?.nome}?
-            Esta ação não pode ser desfeita e excluirá todos os dados associados ao aluno.
+            Tem certeza que deseja cancelar a matrícula do aluno {alunoCancelando?.nome}?
+            Esta ação não pode ser desfeita.
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDialogAberto(false)}>Cancelar</Button>
-          <Button onClick={handleExcluirAluno} color="error" variant="contained">
-            Excluir
+          <Button onClick={() => setDialogAberto(false)}>Voltar</Button>
+          <Button onClick={handleCancelarMatricula} color="error" variant="contained">
+            Cancelar Matrícula
           </Button>
         </DialogActions>
       </Dialog>
@@ -322,12 +382,40 @@ const Alunos: React.FC = () => {
                 ))}
               </Select>
             </FormControl>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={alunoEditando?.status_matricula === 'ATIVA'}
+                  onChange={(e) => setAlunoEditando({
+                    ...alunoEditando!,
+                    status_matricula: e.target.checked ? 'ATIVA' : 'CANCELADA'
+                  })}
+                />
+              }
+              label="Matrícula Ativa"
+            />
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogEdicaoAberto(false)}>Cancelar</Button>
           <Button onClick={handleEditarAluno} color="primary" variant="contained">
             Salvar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={dialogExclusaoAberto} onClose={() => setDialogExclusaoAberto(false)}>
+        <DialogTitle>Confirmar Exclusão</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Tem certeza que deseja excluir permanentemente o aluno {alunoExcluindo?.nome}?
+            Esta ação não pode ser desfeita.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogExclusaoAberto(false)}>Cancelar</Button>
+          <Button onClick={handleDeletarAluno} color="error" variant="contained">
+            Excluir Permanentemente
           </Button>
         </DialogActions>
       </Dialog>
