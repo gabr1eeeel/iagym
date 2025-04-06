@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "IA Gym",
+  "name": "IA Gym - Sistema de Gestão de Academia",
   "icons": [
     {
       "src": "favicon.ico",
