@@ -33,8 +33,11 @@ Este projeto foi desenvolvido utilizando **Vibe Coding**, uma técnica de progra
 - Exclusão de registros
 - Visualização detalhada do perfil
 
-![Cadastro e Edição de Alunos](/.github/assets/gifs/cadastroeedicaoaluno.gif)
-![Exclusão de Alunos](/.github/assets/gifs/excluindoaluno.gif)
+### Cadastro e Edição de Alunos
+![Interface de cadastro e edição de informações dos alunos, permitindo atualizar dados pessoais e do plano](/.github/assets/gifs/cadastroeedicaoaluno.gif)
+
+### Processo de Exclusão de Alunos
+![Demonstração do processo seguro de exclusão de alunos do sistema](/.github/assets/gifs/excluindoaluno.gif)
 
 ### 📊 Análise de Frequência
 - Registro de check-in
@@ -42,8 +45,11 @@ Este projeto foi desenvolvido utilizando **Vibe Coding**, uma técnica de progra
 - Visualização de métricas de presença
 - Cálculo de percentual de frequência nos últimos 30 dias
 
-![Registro de Check-in](/.github/assets/gifs/cadastrarcheckin.gif)
-![Consulta de Frequência](/.github/assets/gifs/consultarfrequencia.gif)
+### Registro de Check-in de Alunos
+![Sistema de registro de check-in dos alunos na academia](/.github/assets/gifs/cadastrarcheckin.gif)
+
+### Consulta de Histórico de Frequência
+![Visualização detalhada do histórico de frequência e métricas de presença](/.github/assets/gifs/consultarfrequencia.gif)
 
 ### 🔮 Análise de Churn com Machine Learning
 - Predição de risco de cancelamento usando Random Forest
@@ -58,8 +64,11 @@ Este projeto foi desenvolvido utilizando **Vibe Coding**, uma técnica de progra
   - Média histórica de check-ins
   - Valor do plano
 
-![Consulta de Churn](/.github/assets/gifs/consultarchurn.gif)
-![Atualização de Análise de Churn](/.github/assets/gifs/churnatualizando.gif)
+### Consulta de Risco de Churn
+![Análise detalhada do risco de cancelamento de matrícula do aluno](/.github/assets/gifs/consultarchurn.gif)
+
+### Atualização da Análise de Churn
+![Processo de atualização e recálculo do risco de churn baseado em novos dados](/.github/assets/gifs/churnatualizando.gif)
 
 ### 💳 Gestão de Planos
 - Cadastro de planos
